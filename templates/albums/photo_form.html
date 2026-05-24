@@ -1,21 +1,68 @@
 {% extends 'base.html' %}
-{% block title %}Photo form | Photo Album{% endblock %}
+{% load static %}
+{% block body_class %}{% if user.is_authenticated %}is-authenticated photo-form-page{% else %}photo-form-page{% endif %}{% endblock %}
+{% block title %}{% if object %}Edit Photo | Photo Album{% else %}Add Photo | Photo Album{% endif %}{% endblock %}
+{% block page_head %}
+<link rel="stylesheet" href="{% static 'css/album-form.css' %}">
+{% endblock %}
 {% block content %}
-<section class="panel form-shell">
-    <p class="eyebrow">Photo</p>
-    <h1>{% if object %}Edit photo{% else %}Add photo{% endif %}</h1>
-    <form method="post" enctype="multipart/form-data" class="form-panel">
-        {% csrf_token %}
-        {{ form.non_field_errors }}
-        <label>
-            Image
-            {{ form.image }}
-        </label>
-        <label>
-            Caption
-            {{ form.caption }}
-        </label>
-        <button class="button button-dark" type="submit">Save photo</button>
-    </form>
+<section class="album-form-shell photo-form-shell">
+    <div class="album-form-header">
+        <a class="album-back-link" href="{% if object %}{{ object.album.get_absolute_url }}{% else %}{{ album.get_absolute_url }}{% endif %}">
+            <span class="album-back-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                    <path d="M15.5 5.5a1 1 0 0 1 0 1.4L10.4 12l5.1 5.1a1 1 0 0 1-1.4 1.4l-5.8-5.8a1 1 0 0 1 0-1.4l5.8-5.8a1 1 0 0 1 1.4 0Z" fill="currentColor" />
+                </svg>
+            </span>
+            <span>Back to Album</span>
+        </a>
+
+        <div class="album-form-copy">
+            <h1>{% if object %}Edit Photo{% else %}Add New Photo{% endif %}</h1>
+            <p>{% if object %}Update the image or caption for this photo{% else %}Upload a new image to this album{% endif %}</p>
+        </div>
+    </div>
+
+    <div class="album-form-card card panel photo-form-card" data-photo-form-shell>
+        <div class="album-form-card-header">
+            <h2>Photo Details</h2>
+        </div>
+
+        <form method="post" enctype="multipart/form-data" class="album-form photo-form" data-photo-form novalidate>
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+
+            <div class="album-field photo-upload-field{% if form.image.errors %} has-error{% endif %}" data-field-wrap="image">
+                <label for="{{ form.image.id_for_label }}">Image</label>
+                <div class="photo-upload-shell">
+                    {{ form.image }}
+                    <span class="photo-upload-hint" data-photo-file-label>
+                        {% if object and object.image %}Current image selected{% else %}Choose a photo file{% endif %}
+                    </span>
+                </div>
+                <p class="album-field-error" data-field-error="image"{% if not form.image.errors %} hidden{% endif %}>
+                    {% if form.image.errors %}{{ form.image.errors.0 }}{% endif %}
+                </p>
+            </div>
+
+            <div class="album-field{% if form.caption.errors %} has-error{% endif %}" data-field-wrap="caption">
+                <label for="{{ form.caption.id_for_label }}">Caption (Optional)</label>
+                {{ form.caption }}
+                <p class="album-field-error" data-field-error="caption"{% if not form.caption.errors %} hidden{% endif %}>
+                    {% if form.caption.errors %}{{ form.caption.errors.0 }}{% endif %}
+                </p>
+            </div>
+
+            <div class="album-form-actions">
+                <button class="button button-dark album-submit-button" type="submit" data-submit-button>
+                    {{ object|yesno:'Save Changes,Upload Photo' }}
+                </button>
+                <a class="button album-cancel-button" href="{% if object %}{{ object.album.get_absolute_url }}{% else %}{{ album.get_absolute_url }}{% endif %}">Cancel</a>
+            </div>
+        </form>
+    </div>
 </section>
+{% endblock %}
+{% block page_scripts %}
+<script src="{% static 'js/photo-form.js' %}" defer></script>
 {% endblock %}

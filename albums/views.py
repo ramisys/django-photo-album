@@ -5,6 +5,7 @@ from django.urls import reverse_lazy
 from django.utils.timezone import localtime
 from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
 
+from .forms import AlbumForm, PhotoForm
 from .models import Album, Photo
 
 
@@ -59,7 +60,7 @@ class AlbumDetailView(AlbumOwnershipMixin, DetailView):
 
 class AlbumCreateView(AlbumOwnershipMixin, CreateView):
     model = Album
-    fields = ['title', 'description']
+    form_class = AlbumForm
     template_name = 'albums/album_form.html'
 
     def form_valid(self, form):
@@ -69,7 +70,7 @@ class AlbumCreateView(AlbumOwnershipMixin, CreateView):
 
 class AlbumUpdateView(AlbumOwnershipMixin, UpdateView):
     model = Album
-    fields = ['title', 'description']
+    form_class = AlbumForm
     template_name = 'albums/album_form.html'
 
     def get_queryset(self):
@@ -86,7 +87,7 @@ class AlbumDeleteView(AlbumOwnershipMixin, DeleteView):
 
 class PhotoCreateView(AlbumOwnershipMixin, CreateView):
     model = Photo
-    fields = ['image', 'caption']
+    form_class = PhotoForm
     template_name = 'albums/photo_form.html'
 
     def dispatch(self, request, *args, **kwargs):
@@ -97,13 +98,18 @@ class PhotoCreateView(AlbumOwnershipMixin, CreateView):
         form.instance.album = self.album
         return super().form_valid(form)
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['album'] = self.album
+        return context
+
     def get_success_url(self):
         return self.album.get_absolute_url()
 
 
 class PhotoUpdateView(AlbumOwnershipMixin, UpdateView):
     model = Photo
-    fields = ['image', 'caption']
+    form_class = PhotoForm
     template_name = 'albums/photo_form.html'
 
     def get_queryset(self):

@@ -1,21 +1,63 @@
 {% extends 'base.html' %}
-{% block title %}Album form | Photo Album{% endblock %}
+{% load static %}
+{% block body_class %}{% if user.is_authenticated %}is-authenticated album-form-page{% else %}album-form-page{% endif %}{% endblock %}
+{% block title %}{% if object %}Edit Album | Photo Album{% else %}Create Album | Photo Album{% endif %}{% endblock %}
+{% block page_head %}
+<link rel="stylesheet" href="{% static 'css/album-form.css' %}">
+{% endblock %}
 {% block content %}
-<section class="panel form-shell">
-    <p class="eyebrow">Album</p>
-    <h1>{% if object %}Edit album{% else %}Create album{% endif %}</h1>
-    <form method="post" class="form-panel">
-        {% csrf_token %}
-        {{ form.non_field_errors }}
-        <label>
-            Title
-            {{ form.title }}
-        </label>
-        <label>
-            Description
-            {{ form.description }}
-        </label>
-        <button class="button button-dark" type="submit">Save album</button>
-    </form>
+<section class="album-form-shell">
+    <div class="album-form-header">
+        <a class="album-back-link" href="{% url 'album-list' %}">
+            <span class="album-back-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                    <path d="M15.5 5.5a1 1 0 0 1 0 1.4L10.4 12l5.1 5.1a1 1 0 0 1-1.4 1.4l-5.8-5.8a1 1 0 0 1 0-1.4l5.8-5.8a1 1 0 0 1 1.4 0Z" fill="currentColor" />
+                </svg>
+            </span>
+            <span>Back to Albums</span>
+        </a>
+
+        <div class="album-form-copy">
+            <h1>{% if object %}Edit Album{% else %}Create New Album{% endif %}</h1>
+            <p>Start a new photo collection</p>
+        </div>
+    </div>
+
+    <div class="album-form-card card panel" data-album-form-shell>
+        <div class="album-form-card-header">
+            <h2>Album Details</h2>
+        </div>
+
+        <form method="post" class="album-form" data-album-form novalidate>
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+
+            <div class="album-field{% if form.title.errors %} has-error{% endif %}" data-field-wrap="title">
+                <label for="{{ form.title.id_for_label }}">Album Title</label>
+                {{ form.title }}
+                <p class="album-field-error" data-field-error="title"{% if not form.title.errors %} hidden{% endif %}>
+                    {% if form.title.errors %}{{ form.title.errors.0 }}{% else %}Title is required{% endif %}
+                </p>
+            </div>
+
+            <div class="album-field{% if form.description.errors %} has-error{% endif %}" data-field-wrap="description">
+                <label for="{{ form.description.id_for_label }}">Description (Optional)</label>
+                {{ form.description }}
+                <p class="album-field-error" data-field-error="description"{% if not form.description.errors %} hidden{% endif %}>
+                    {% if form.description.errors %}{{ form.description.errors.0 }}{% endif %}
+                </p>
+            </div>
+
+            <div class="album-form-actions">
+                <button class="button button-dark album-submit-button" type="submit" data-submit-button>
+                    {{ form.instance.pk|yesno:'Save Changes,Create Album' }}
+                </button>
+                <a class="button album-cancel-button" href="{% url 'album-list' %}">Cancel</a>
+            </div>
+        </form>
+    </div>
 </section>
+{% endblock %}
+{% block page_scripts %}
+<script src="{% static 'js/album-form.js' %}" defer></script>
 {% endblock %}
