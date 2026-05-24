@@ -1,29 +1,134 @@
 {% extends 'base.html' %}
+{% load static %}
+{% block body_class %}signup-page{% endblock %}
 {% block title %}Create account | Photo Album{% endblock %}
+{% block page_head %}
+<link rel="stylesheet" href="{% static 'css/signup.css' %}">
+{% endblock %}
 {% block content %}
-<section class="auth-card">
-    <div class="hero-copy">
-        <p class="eyebrow">Join the workspace</p>
-        <h1>Create a standard user account.</h1>
-        <p>Administrators can be granted the Album Administrators group in Django admin for broader access.</p>
+<section class="signup-shell">
+    <div class="signup-card">
+        <div class="signup-card-header">
+            <h1>Create Account</h1>
+            <p>Sign up to start organizing your photos</p>
+        </div>
+
+        <form method="post" class="signup-form" novalidate>
+            {% csrf_token %}
+            {% if form.non_field_errors %}
+            <div class="signup-errors" role="alert">
+                {{ form.non_field_errors }}
+            </div>
+            {% endif %}
+
+            <div class="signup-field{% if form.username.errors %} has-error{% endif %}">
+                <label for="id_username">Username</label>
+                <input
+                    id="id_username"
+                    name="username"
+                    type="text"
+                    placeholder="john_doe"
+                    autocomplete="username"
+                    value="{{ form.username.value|default_if_none:''|escape }}"
+                    {% if form.username.errors %}aria-invalid="true"{% endif %}
+                    required>
+                {% if form.username.errors %}
+                <p class="signup-field-error">{{ form.username.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <div class="signup-field{% if form.full_name.errors %} has-error{% endif %}">
+                <label for="id_full_name">Full Name</label>
+                <input
+                    id="id_full_name"
+                    name="full_name"
+                    type="text"
+                    placeholder="John Doe"
+                    autocomplete="name"
+                    value="{{ form.full_name.value|default_if_none:''|escape }}"
+                    {% if form.full_name.errors %}aria-invalid="true"{% endif %}
+                    required>
+                {% if form.full_name.errors %}
+                <p class="signup-field-error">{{ form.full_name.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <div class="signup-field{% if form.email.errors %} has-error{% endif %}">
+                <label for="id_email">Email</label>
+                <input
+                    id="id_email"
+                    name="email"
+                    type="email"
+                    placeholder="john@example.com"
+                    autocomplete="email"
+                    value="{{ form.email.value|default_if_none:''|escape }}"
+                    {% if form.email.errors %}aria-invalid="true"{% endif %}
+                    required>
+                {% if form.email.errors %}
+                <p class="signup-field-error">{{ form.email.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <div class="signup-field{% if form.password1.errors %} has-error{% endif %}">
+                <label for="id_password1">Password</label>
+                <div class="password-field">
+                    <input
+                        id="id_password1"
+                        name="password1"
+                        type="password"
+                        placeholder="••••••••"
+                        autocomplete="new-password"
+                        {% if form.password1.errors %}aria-invalid="true"{% endif %}
+                        required>
+                    <button class="password-toggle" type="button" aria-label="Show password" aria-pressed="false" data-password-toggle="password1">
+                        <svg class="password-toggle-icon password-toggle-icon-show" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                            <path d="M12 5c5.5 0 9.9 4 11 7-.9 2.3-2.7 4.4-5 5.9a1 1 0 1 1-1.1-1.7c1.7-1.1 3-2.5 3.9-4.2-.9-1.7-2.4-3.4-4.6-4.6-1.1-.6-2.7-1.2-4.2-1.2s-3.1.6-4.2 1.2C5.6 8.6 4.1 10.3 3.2 12c.9 1.7 2.4 3.4 4.6 4.6a1 1 0 0 1-1.1 1.7C4.4 16.8 2.6 14.7 1.7 12 2.8 9 7.2 5 12 5Zm0 4a3 3 0 1 1 0 6 3 3 0 0 1 0-6Zm0-2a5 5 0 1 0 0 10 5 5 0 0 0 0-10Z" fill="currentColor" />
+                        </svg>
+                        <svg class="password-toggle-icon password-toggle-icon-hide" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                            <path d="M2.7 3.3a1 1 0 0 1 1.4 0l17 17a1 1 0 1 1-1.4 1.4l-2.1-2.1c-1.7 1-3.7 1.8-6.1 1.8-6 0-10.4-4.1-11.5-7 1-2.6 3.1-4.8 5.8-6.3L2.7 4.7a1 1 0 0 1 0-1.4Zm5.6 5.6 1.6 1.6a3 3 0 0 0 4.2 4.2l1.6 1.6a5 5 0 0 1-7.4-7.4Zm3.7-1.9a5 5 0 0 1 5.3 5.3l-5.3-5.3Zm1-1.7c5.2.1 9 3.9 10 6.7-.5 1.4-1.4 2.8-2.6 4a1 1 0 0 1-1.4-1.4c.8-.8 1.4-1.6 1.8-2.4-.9-1.7-2.4-3.4-4.6-4.6-.8-.4-1.8-.8-2.9-1l-1.2-1.2c.3 0 .7-.1 1-.1ZM4.8 8.1c-1.2 1-2.1 2.2-2.6 3.2.9 1.7 2.4 3.4 4.6 4.6.5.3 1.1.5 1.7.8a1 1 0 0 1-.7 1.9c-.8-.3-1.5-.6-2.2-1-2.4-1.3-4.4-3.3-5.5-5.8 1-2.3 2.6-4.2 4.7-5.8a1 1 0 1 1 1.2 1.6Zm7.2-.6a2 2 0 0 1 2.9 2.9l-2.9-2.9Z" fill="currentColor" />
+                        </svg>
+                    </button>
+                </div>
+                {% if form.password1.errors %}
+                <p class="signup-field-error">{{ form.password1.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <div class="signup-field{% if form.password2.errors %} has-error{% endif %}">
+                <label for="id_password2">Confirm Password</label>
+                <div class="password-field">
+                    <input
+                        id="id_password2"
+                        name="password2"
+                        type="password"
+                        placeholder="••••••••"
+                        autocomplete="new-password"
+                        {% if form.password2.errors %}aria-invalid="true"{% endif %}
+                        required>
+                    <button class="password-toggle" type="button" aria-label="Show password" aria-pressed="false" data-password-toggle="password2">
+                        <svg class="password-toggle-icon password-toggle-icon-show" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                            <path d="M12 5c5.5 0 9.9 4 11 7-.9 2.3-2.7 4.4-5 5.9a1 1 0 1 1-1.1-1.7c1.7-1.1 3-2.5 3.9-4.2-.9-1.7-2.4-3.4-4.6-4.6-1.1-.6-2.7-1.2-4.2-1.2s-3.1.6-4.2 1.2C5.6 8.6 4.1 10.3 3.2 12c.9 1.7 2.4 3.4 4.6 4.6a1 1 0 0 1-1.1 1.7C4.4 16.8 2.6 14.7 1.7 12 2.8 9 7.2 5 12 5Zm0 4a3 3 0 1 1 0 6 3 3 0 0 1 0-6Zm0-2a5 5 0 1 0 0 10 5 5 0 0 0 0-10Z" fill="currentColor" />
+                        </svg>
+                        <svg class="password-toggle-icon password-toggle-icon-hide" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                            <path d="M2.7 3.3a1 1 0 0 1 1.4 0l17 17a1 1 0 1 1-1.4 1.4l-2.1-2.1c-1.7 1-3.7 1.8-6.1 1.8-6 0-10.4-4.1-11.5-7 1-2.6 3.1-4.8 5.8-6.3L2.7 4.7a1 1 0 0 1 0-1.4Zm5.6 5.6 1.6 1.6a3 3 0 0 0 4.2 4.2l1.6 1.6a5 5 0 0 1-7.4-7.4Zm3.7-1.9a5 5 0 0 1 5.3 5.3l-5.3-5.3Zm1-1.7c5.2.1 9 3.9 10 6.7-.5 1.4-1.4 2.8-2.6 4a1 1 0 0 1-1.4-1.4c.8-.8 1.4-1.6 1.8-2.4-.9-1.7-2.4-3.4-4.6-4.6-.8-.4-1.8-.8-2.9-1l-1.2-1.2c.3 0 .7-.1 1-.1ZM4.8 8.1c-1.2 1-2.1 2.2-2.6 3.2.9 1.7 2.4 3.4 4.6 4.6.5.3 1.1.5 1.7.8a1 1 0 0 1-.7 1.9c-.8-.3-1.5-.6-2.2-1-2.4-1.3-4.4-3.3-5.5-5.8 1-2.3 2.6-4.2 4.7-5.8a1 1 0 1 1 1.2 1.6Zm7.2-.6a2 2 0 0 1 2.9 2.9l-2.9-2.9Z" fill="currentColor" />
+                        </svg>
+                    </button>
+                </div>
+                {% if form.password2.errors %}
+                <p class="signup-field-error">{{ form.password2.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <button class="signup-submit" type="submit">Create Account</button>
+
+            <p class="signup-footer">
+                Already have an account?
+                <a href="{% url 'login' %}">Sign in</a>
+            </p>
+        </form>
     </div>
-    <form method="post" class="panel form-panel">
-        {% csrf_token %}
-        {{ form.non_field_errors }}
-        <label>
-            Username
-            {{ form.username }}
-        </label>
-        <label>
-            Password
-            {{ form.password1 }}
-        </label>
-        <label>
-            Confirm password
-            {{ form.password2 }}
-        </label>
-        <button class="button button-dark" type="submit">Create account</button>
-        <p class="fine-print">Already have an account? <a href="{% url 'login' %}">Sign in</a>.</p>
-    </form>
 </section>
+{% endblock %}
+{% block page_scripts %}
+<script src="{% static 'js/signup.js' %}" defer></script>
 {% endblock %}
