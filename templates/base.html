@@ -55,22 +55,6 @@
                     </span>
                     <span>New album</span>
                 </a>
-                <form method="post" action="{% url 'logout' %}" class="sidebar-form">
-                    {% csrf_token %}
-                    <button type="submit" class="sidebar-link sidebar-button" data-close-navbar>
-                        <span class="sidebar-link-icon" aria-hidden="true">
-                            <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
-                                <path
-                                    d="M10 7a1 1 0 0 1 1 1v2h4.5a1.5 1.5 0 0 1 1.1.5l2.4 2.6a1.5 1.5 0 0 1 0 2l-2.4 2.6a1.5 1.5 0 0 1-1.1.5H11a1 1 0 1 1 0-2h4.4l1.9-2-1.9-2H11a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1Z"
-                                    fill="currentColor" />
-                                <path
-                                    d="M4 5.5A1.5 1.5 0 0 1 5.5 4h3A1.5 1.5 0 0 1 10 5.5v13A1.5 1.5 0 0 1 8.5 20h-3A1.5 1.5 0 0 1 4 18.5v-13Z"
-                                    fill="currentColor" opacity="0.35" />
-                            </svg>
-                        </span>
-                        <span>Sign out</span>
-                    </button>
-                </form>
                 {% endwith %}
             </nav>
 
@@ -108,8 +92,6 @@
                             <span class="sr-only">Open account menu</span>
                         </button>
                         <div class="user-menu-panel" hidden data-user-menu-panel>
-                            <a class="user-menu-link" href="{% url 'album-list' %}" data-close-navbar>Albums</a>
-                            <a class="user-menu-link" href="{% url 'album-create' %}" data-close-navbar>New album</a>
                             <form method="post" action="{% url 'logout' %}" class="user-menu-form">
                                 {% csrf_token %}
                                 <button type="submit" class="user-menu-link user-menu-button" data-close-navbar>Sign
