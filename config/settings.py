@@ -174,3 +174,6 @@ if not DEBUG:
     SECURE_SSL_REDIRECT = True
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Use a custom user model declared in accounts.models
+AUTH_USER_MODEL = 'accounts.CustomUser'
