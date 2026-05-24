@@ -906,3 +906,21 @@ p {
         padding: 0.5rem;
     }
 }
+
+/* Page-specific overrides */
+.album-list-page .container {
+    background-color: #ffffff;
+}
+
+/* Page polish to match screenshot */
+.album-list-page {
+    background: #ffffff;
+}
+.album-list-page .container {
+    padding-top: 2.5rem;
+    padding-bottom: 4rem;
+}
+.album-list-page .page-hero {
+    padding-top: 0.5rem;
+    padding-bottom: 1rem;
+}

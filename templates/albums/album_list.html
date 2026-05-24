@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% block body_class %}{% if user.is_authenticated %}is-authenticated album-list-page{% else %}album-list-page{% endif %}{% endblock %}
 {% block title %}Albums | Photo Album{% endblock %}
 {% block content %}
 <section class="page-hero album-hero">
