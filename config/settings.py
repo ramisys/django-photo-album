@@ -153,8 +153,6 @@ STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
 
-# Use WhiteNoise for static files in both development and production
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 cloudinary.config(
     cloud_name=os.getenv('CLOUDINARY_CLOUD_NAME'),
