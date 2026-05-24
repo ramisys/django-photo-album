@@ -1,47 +1,142 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}Photo Album{% endblock %}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Playfair+Display:wght@600;700&display=swap"
+        rel="stylesheet">
+    <script src="{% static 'js/sidebar.js' %}" defer></script>
+    <script src="{% static 'js/navbar.js' %}" defer></script>
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
-<body>
-    <div class="page-shell">
-        <header class="topbar">
-            <a class="brand" href="{% url 'album-list' %}">
-                <span class="brand-mark">PA</span>
-                <span class="brand-text">Photo Album</span>
-            </a>
-            <nav class="topbar-nav">
-                {% if user.is_authenticated %}
-                    <a href="{% url 'album-create' %}">New album</a>
-                    <form method="post" action="{% url 'logout' %}" style="display:inline; margin:0;">
-                        {% csrf_token %}
-                        <button type="submit" class="button">Sign out</button>
-                    </form>
-                {% else %}
-                    <a href="{% url 'login' %}">Sign in</a>
-                    <a class="button button-dark" href="{% url 'signup' %}">Create account</a>
-                {% endif %}
-            </nav>
-        </header>
 
-        <main class="container">
-            {% if messages %}
+<body class="{% if user.is_authenticated %}is-authenticated{% endif %}">
+    <div class="page-shell{% if user.is_authenticated %} has-sidebar{% endif %}">
+        {% if user.is_authenticated %}
+        <aside class="sidebar" id="site-sidebar" data-sidebar>
+            <div class="sidebar-top">
+                <a class="brand" href="{% url 'album-list' %}">
+                    <span class="brand-mark">PA</span>
+                    <span class="brand-text">Photo Album</span>
+                </a>
+                <button class="sidebar-close-button" type="button" aria-label="Close sidebar" data-sidebar-close>
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+
+            <nav class="sidebar-nav" aria-label="Sidebar navigation">
+                {% with current_url_name=request.resolver_match.url_name %}
+                <a class="sidebar-link{% if current_url_name == 'album-list' or current_url_name == 'album-detail' or current_url_name == 'album-update' or current_url_name == 'album-delete' or current_url_name == 'photo-update' or current_url_name == 'photo-delete' or current_url_name == 'photo-create' %} is-active{% endif %}"
+                    href="{% url 'album-list' %}" data-close-navbar>
+                    <span class="sidebar-link-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                            <path
+                                d="M4 5.5A1.5 1.5 0 0 1 5.5 4h4A1.5 1.5 0 0 1 11 5.5v4A1.5 1.5 0 0 1 9.5 11h-4A1.5 1.5 0 0 1 4 9.5v-4ZM13 5.5A1.5 1.5 0 0 1 14.5 4h4A1.5 1.5 0 0 1 20 5.5v4A1.5 1.5 0 0 1 18.5 11h-4A1.5 1.5 0 0 1 13 9.5v-4ZM4 14.5A1.5 1.5 0 0 1 5.5 13h4A1.5 1.5 0 0 1 11 14.5v4A1.5 1.5 0 0 1 9.5 20h-4A1.5 1.5 0 0 1 4 18.5v-4ZM13 14.5A1.5 1.5 0 0 1 14.5 13h4A1.5 1.5 0 0 1 20 14.5v4A1.5 1.5 0 0 1 18.5 20h-4A1.5 1.5 0 0 1 13 18.5v-4Z"
+                                fill="currentColor" />
+                        </svg>
+                    </span>
+                    <span>Albums</span>
+                </a>
+                <a class="sidebar-link{% if current_url_name == 'album-create' or current_url_name == 'photo-create' %} is-active{% endif %}"
+                    href="{% url 'album-create' %}" data-close-navbar>
+                    <span class="sidebar-link-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                            <path
+                                d="M12 4a1 1 0 0 1 1 1v6h6a1 1 0 1 1 0 2h-6v6a1 1 0 1 1-2 0v-6H5a1 1 0 1 1 0-2h6V5a1 1 0 0 1 1-1Z"
+                                fill="currentColor" />
+                        </svg>
+                    </span>
+                    <span>New album</span>
+                </a>
+                <form method="post" action="{% url 'logout' %}" class="sidebar-form">
+                    {% csrf_token %}
+                    <button type="submit" class="sidebar-link sidebar-button" data-close-navbar>
+                        <span class="sidebar-link-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                                <path
+                                    d="M10 7a1 1 0 0 1 1 1v2h4.5a1.5 1.5 0 0 1 1.1.5l2.4 2.6a1.5 1.5 0 0 1 0 2l-2.4 2.6a1.5 1.5 0 0 1-1.1.5H11a1 1 0 1 1 0-2h4.4l1.9-2-1.9-2H11a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1Z"
+                                    fill="currentColor" />
+                                <path
+                                    d="M4 5.5A1.5 1.5 0 0 1 5.5 4h3A1.5 1.5 0 0 1 10 5.5v13A1.5 1.5 0 0 1 8.5 20h-3A1.5 1.5 0 0 1 4 18.5v-13Z"
+                                    fill="currentColor" opacity="0.35" />
+                            </svg>
+                        </span>
+                        <span>Sign out</span>
+                    </button>
+                </form>
+                {% endwith %}
+            </nav>
+
+            <div class="sidebar-footer">PhotoAlbum v1.0</div>
+        </aside>
+        <div class="sidebar-overlay" data-sidebar-overlay hidden></div>
+        {% endif %}
+
+        <div class="app-content">
+            <header class="topbar" data-navbar>
+                {% if user.is_authenticated %}
+                <button class="topbar-icon-button sidebar-toggle" type="button" aria-controls="site-sidebar"
+                    aria-expanded="false" aria-label="Open sidebar" data-sidebar-toggle>
+                    <span aria-hidden="true">☰</span>
+                </button>
+                {% endif %}
+
+                <div class="topbar-actions">
+                    <button class="topbar-icon-button theme-toggle" type="button" aria-label="Toggle color theme"
+                        data-theme-toggle>
+                        <span aria-hidden="true" data-theme-icon>☾</span>
+                    </button>
+
+                    {% if user.is_authenticated %}
+                    <div class="user-menu" data-user-menu>
+                        <button class="user-menu-toggle" type="button" aria-haspopup="true" aria-expanded="false"
+                            data-user-menu-toggle>
+                            <span class="user-avatar" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                    <path
+                                        d="M12 12.2a4.9 4.9 0 1 0-4.9-4.9 4.9 4.9 0 0 0 4.9 4.9Zm0 2.3c-4.2 0-7.8 2.3-8.7 5.5a1 1 0 0 0 1 .9h15.4a1 1 0 0 0 1-.9c-.9-3.2-4.5-5.5-8.7-5.5Z"
+                                        fill="currentColor" />
+                                </svg>
+                            </span>
+                            <span class="sr-only">Open account menu</span>
+                        </button>
+                        <div class="user-menu-panel" hidden data-user-menu-panel>
+                            <a class="user-menu-link" href="{% url 'album-list' %}" data-close-navbar>Albums</a>
+                            <a class="user-menu-link" href="{% url 'album-create' %}" data-close-navbar>New album</a>
+                            <form method="post" action="{% url 'logout' %}" class="user-menu-form">
+                                {% csrf_token %}
+                                <button type="submit" class="user-menu-link user-menu-button" data-close-navbar>Sign
+                                    out</button>
+                            </form>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="topbar-actions-spacer"></div>
+                    <a class="topbar-link" href="{% url 'login' %}" data-close-navbar>Sign in</a>
+                    <a class="button button-dark" href="{% url 'signup' %}" data-close-navbar>Create account</a>
+                    {% endif %}
+                </div>
+            </header>
+
+            <main class="container">
+                {% if messages %}
                 <div class="messages">
                     {% for message in messages %}
-                        <div class="message {{ message.tags }}">{{ message }}</div>
+                    <div class="message {{ message.tags }}">{{ message }}</div>
                     {% endfor %}
                 </div>
-            {% endif %}
+                {% endif %}
 
-            {% block content %}{% endblock %}
-        </main>
+                {% block content %}{% endblock %}
+            </main>
+        </div>
     </div>
 </body>
+
 </html>
