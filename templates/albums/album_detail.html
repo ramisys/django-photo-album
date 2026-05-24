@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title %}{{ album.title }} | Photo Album{% endblock %}
+{% block content %}
+<section class="page-hero stacked">
+    <div>
+        <p class="eyebrow">Album detail</p>
+        <h1>{{ album.title }}</h1>
+        <p>{{ album.description|default:'No description provided.' }}</p>
+    </div>
+    <div class="actions">
+        <a class="button button-dark" href="{% url 'photo-create' album.pk %}">Add photo</a>
+        <a class="button" href="{% url 'album-update' album.pk %}">Edit album</a>
+        <a class="button button-danger" href="{% url 'album-delete' album.pk %}">Delete album</a>
+    </div>
+</section>
+
+<section class="grid photos-grid">
+    {% for photo in album.photos.all %}
+        <article class="card photo-card">
+            <div class="photo-frame">
+                <img src="{{ photo.image.url }}" alt="{{ photo.caption|default:album.title }}">
+            </div>
+            <div class="photo-body">
+                <p>{{ photo.caption|default:'No caption provided.' }}</p>
+                <div class="card-footer">
+                    <span>{{ photo.uploaded_at|date:'M d, Y' }}</span>
+                    <span>
+                        <a href="{% url 'photo-update' album.pk photo.pk %}">Edit</a>
+                        ·
+                        <a href="{% url 'photo-delete' album.pk photo.pk %}">Delete</a>
+                    </span>
+                </div>
+            </div>
+        </article>
+    {% empty %}
+        <article class="panel empty-state">
+            <h2>No photos yet.</h2>
+            <p>Upload the first image to complete this album.</p>
+        </article>
+    {% endfor %}
+</section>
+{% endblock %}

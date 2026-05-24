@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}Create account | Photo Album{% endblock %}
+{% block content %}
+<section class="auth-card">
+    <div class="hero-copy">
+        <p class="eyebrow">Join the workspace</p>
+        <h1>Create a standard user account.</h1>
+        <p>Administrators can be granted the Album Administrators group in Django admin for broader access.</p>
+    </div>
+    <form method="post" class="panel form-panel">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        <label>
+            Username
+            {{ form.username }}
+        </label>
+        <label>
+            Password
+            {{ form.password1 }}
+        </label>
+        <label>
+            Confirm password
+            {{ form.password2 }}
+        </label>
+        <button class="button button-dark" type="submit">Create account</button>
+        <p class="fine-print">Already have an account? <a href="{% url 'login' %}">Sign in</a>.</p>
+    </form>
+</section>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}Photo form | Photo Album{% endblock %}
+{% block content %}
+<section class="panel form-shell">
+    <p class="eyebrow">Photo</p>
+    <h1>{% if object %}Edit photo{% else %}Add photo{% endif %}</h1>
+    <form method="post" enctype="multipart/form-data" class="form-panel">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        <label>
+            Image
+            {{ form.image }}
+        </label>
+        <label>
+            Caption
+            {{ form.caption }}
+        </label>
+        <button class="button button-dark" type="submit">Save photo</button>
+    </form>
+</section>
+{% endblock %}

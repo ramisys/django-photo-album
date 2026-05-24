@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}Albums | Photo Album{% endblock %}
+{% block content %}
+<section class="page-hero">
+    <div>
+        <p class="eyebrow">Library</p>
+        <h1>Your albums at a glance.</h1>
+        <p>Browse owned albums or, if you are in the administrator group, manage every album in the workspace.</p>
+    </div>
+    <a class="button button-dark" href="{% url 'album-create' %}">New album</a>
+</section>
+
+<section class="grid">
+    {% for album in albums %}
+        <article class="card album-card">
+            <div class="card-meta">{{ album.created_at|date:'M d, Y' }}</div>
+            <h2><a href="{% url 'album-detail' album.pk %}">{{ album.title }}</a></h2>
+            <p>{{ album.description|default:'No description yet.' }}</p>
+            <div class="card-footer">
+                <span>{{ album.photos.count }} photos</span>
+                <span>{{ album.owner.username }}</span>
+            </div>
+        </article>
+    {% empty %}
+        <article class="panel empty-state">
+            <h2>No albums yet.</h2>
+            <p>Create the first one to start organizing your photos.</p>
+        </article>
+    {% endfor %}
+</section>
+{% endblock %}

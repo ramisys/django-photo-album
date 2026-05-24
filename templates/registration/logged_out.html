@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block title %}Signed out | Photo Album{% endblock %}
+{% block content %}
+<section class="panel empty-state">
+    <p class="eyebrow">Signed out</p>
+    <h1>You are now signed out.</h1>
+    <p><a href="{% url 'login' %}">Sign in again</a> when you are ready to continue.</p>
+</section>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}Delete photo | Photo Album{% endblock %}
+{% block content %}
+<section class="panel form-shell">
+    <p class="eyebrow">Danger zone</p>
+    <h1>Delete photo</h1>
+    <p>This photo will be removed permanently from the album.</p>
+    <form method="post" class="form-panel">
+        {% csrf_token %}
+        <button class="button button-danger" type="submit">Delete photo</button>
+        <a class="button" href="{% url 'album-detail' object.album.pk %}">Cancel</a>
+    </form>
+</section>
+{% endblock %}
