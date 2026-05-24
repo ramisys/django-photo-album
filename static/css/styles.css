@@ -499,6 +499,221 @@ p {
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
 }
 
+.album-hero {
+    align-items: end;
+    gap: 1.5rem;
+    margin-bottom: 1.75rem;
+}
+
+.album-hero h1 {
+    font-family: 'Manrope', sans-serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 500;
+    letter-spacing: -0.03em;
+}
+
+.album-summary {
+    margin: 0.4rem 0 0;
+    color: var(--muted);
+    font-size: 1rem;
+}
+
+.album-create-button {
+    min-width: 0;
+    padding-inline: 0.7rem;
+}
+
+.button-icon {
+    display: inline-grid;
+    place-items: center;
+    width: 0.9rem;
+    height: 0.9rem;
+    flex: 0 0 auto;
+}
+
+.button-icon svg {
+    width: 100%;
+    height: 100%;
+}
+
+.album-browser {
+    display: grid;
+    gap: 1.25rem;
+}
+
+.album-toolbar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 1rem;
+    align-items: center;
+}
+
+.album-search {
+    position: relative;
+    display: block;
+}
+
+.album-search-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    display: inline-grid;
+    place-items: center;
+    width: 1.1rem;
+    height: 1.1rem;
+    color: var(--muted);
+    pointer-events: none;
+}
+
+.album-search-icon svg {
+    width: 100%;
+    height: 100%;
+}
+
+.album-search input {
+    width: 100%;
+    padding: 0.95rem 1rem 0.95rem 2.9rem;
+    border-radius: 1rem;
+    border: 1px solid rgba(24, 32, 51, 0.15);
+    background: var(--surface-strong);
+    color: var(--text);
+    font: inherit;
+}
+
+.album-search input::placeholder {
+    color: var(--muted);
+}
+
+.album-toolbar-actions {
+    display: grid;
+    justify-items: end;
+    gap: 0;
+}
+
+.view-toggle-group {
+    display: inline-flex;
+    gap: 0.4rem;
+}
+
+.view-toggle-button {
+    display: inline-grid;
+    place-items: center;
+    width: 2.8rem;
+    height: 2.8rem;
+    border: 0;
+    border-radius: 0.9rem;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.view-toggle-button svg {
+    width: 1.15rem;
+    height: 1.15rem;
+}
+
+.view-toggle-button:hover,
+.view-toggle-button:focus-visible {
+    transform: translateY(-1px);
+}
+
+.view-toggle-button.is-active {
+    background: #e8ebf2;
+    color: #111111;
+}
+
+.album-list {
+    display: grid;
+    gap: 1.5rem;
+}
+
+.album-list.is-grid {
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.album-list.is-list {
+    grid-template-columns: 1fr;
+}
+
+.album-card {
+    display: grid;
+    overflow: hidden;
+    padding: 0;
+    text-decoration: none;
+    color: inherit;
+    transform: translateY(0);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.album-card:hover,
+.album-card:focus-visible {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(27, 34, 53, 0.14);
+}
+
+.album-card.is-grid {
+    grid-template-rows: auto 1fr;
+}
+
+.album-card.is-list {
+    grid-template-columns: minmax(10rem, 12rem) minmax(0, 1fr);
+}
+
+.album-cover {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 13.5rem;
+    background: #f1f1f5;
+    color: #75778b;
+}
+
+.album-cover-icon {
+    display: inline-grid;
+    place-items: center;
+    width: 4rem;
+    height: 4rem;
+}
+
+.album-cover-icon svg {
+    width: 100%;
+    height: 100%;
+}
+
+.album-card-body {
+    display: grid;
+    gap: 0.4rem;
+    padding: 1.05rem 1rem 1rem;
+}
+
+.album-card-body h2 {
+    font-family: 'Manrope', sans-serif;
+    font-size: 1.08rem;
+    font-weight: 500;
+    line-height: 1.25;
+}
+
+.album-description {
+    margin: 0;
+    display: none;
+}
+
+.album-card-body .card-footer {
+    margin-top: 0;
+    color: #6c7190;
+    font-size: 0.92rem;
+}
+
+.album-empty-state {
+    grid-column: 1 / -1;
+}
+
+.album-empty-state .button {
+    justify-self: center;
+}
+
 .card {
     padding: 1.25rem;
 }
@@ -653,6 +868,30 @@ p {
     .card-footer {
         flex-direction: column;
         align-items: flex-start;
+    }
+
+    .album-toolbar {
+        grid-template-columns: 1fr;
+    }
+
+    .album-toolbar-actions {
+        justify-items: stretch;
+    }
+
+    .view-toggle-group {
+        justify-content: flex-end;
+    }
+
+    .view-toggle-button {
+        flex: 0 0 auto;
+    }
+
+    .album-card.is-list {
+        grid-template-columns: 1fr;
+    }
+
+    .album-cover {
+        min-height: 10rem;
     }
 }
 

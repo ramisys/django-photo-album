@@ -1,31 +1,58 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %}Albums | Photo Album{% endblock %}
 {% block content %}
-<section class="page-hero">
+<section class="page-hero album-hero">
     <div>
-        <p class="eyebrow">Library</p>
-        <h1>Your albums at a glance.</h1>
-        <p>Browse owned albums or, if you are in the administrator group, manage every album in the workspace.</p>
+        <h1>My Albums</h1>
+        <p class="album-summary" data-album-summary>{{ albums|length }} albums in your collection</p>
     </div>
-    <a class="button button-dark" href="{% url 'album-create' %}">New album</a>
+    <a class="button button-dark album-create-button" href="{% url 'album-create' %}">
+        <span class="button-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                <path d="M12 5a1 1 0 0 1 1 1v5h5a1 1 0 1 1 0 2h-5v5a1 1 0 1 1-2 0v-5H6a1 1 0 1 1 0-2h5V6a1 1 0 0 1 1-1Z" fill="currentColor" />
+            </svg>
+        </span>
+        <span>Create Album</span>
+    </a>
 </section>
 
-<section class="grid">
-    {% for album in albums %}
-        <article class="card album-card">
-            <div class="card-meta">{{ album.created_at|date:'M d, Y' }}</div>
-            <h2><a href="{% url 'album-detail' album.pk %}">{{ album.title }}</a></h2>
-            <p>{{ album.description|default:'No description yet.' }}</p>
-            <div class="card-footer">
-                <span>{{ album.photos.count }} photos</span>
-                <span>{{ album.owner.username }}</span>
+{{ albums_payload|json_script:'album-data' }}
+
+<section class="album-browser" data-album-browser data-create-url="{% url 'album-create' %}">
+    <div class="album-toolbar card">
+        <label class="album-search">
+            <span class="sr-only">Search albums</span>
+            <span class="album-search-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                    <path d="M10.5 4a6.5 6.5 0 1 0 4.07 11.58l4.42 4.42a1 1 0 0 0 1.42-1.42l-4.42-4.42A6.5 6.5 0 0 0 10.5 4Zm0 2a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9Z" fill="currentColor" />
+                </svg>
+            </span>
+            <input type="search" placeholder="Search albums..." data-album-search>
+        </label>
+
+        <div class="album-toolbar-actions">
+            <div class="view-toggle-group" role="group" aria-label="Album view mode">
+                <button type="button" class="view-toggle-button is-active" data-view-mode="grid" aria-pressed="true" aria-label="Grid view">
+                    <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                        <path d="M4 4.75A.75.75 0 0 1 4.75 4h5.5a.75.75 0 0 1 .75.75v5.5a.75.75 0 0 1-.75.75h-5.5A.75.75 0 0 1 4 10.25v-5.5Zm9 0A.75.75 0 0 1 13.75 4h5.5a.75.75 0 0 1 .75.75v5.5a.75.75 0 0 1-.75.75h-5.5a.75.75 0 0 1-.75-.75v-5.5ZM4 13.75a.75.75 0 0 1 .75-.75h5.5a.75.75 0 0 1 .75.75v5.5a.75.75 0 0 1-.75.75h-5.5A.75.75 0 0 1 4 19.25v-5.5Zm9 0a.75.75 0 0 1 .75-.75h5.5a.75.75 0 0 1 .75.75v5.5a.75.75 0 0 1-.75.75h-5.5a.75.75 0 0 1-.75-.75v-5.5Z" fill="currentColor" />
+                    </svg>
+                </button>
+                <button type="button" class="view-toggle-button" data-view-mode="list" aria-pressed="false" aria-label="List view">
+                    <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                        <path d="M5 6.25A1.25 1.25 0 1 1 5 3.75a1.25 1.25 0 0 1 0 2.5Zm0 6.5A1.25 1.25 0 1 1 5 10.25a1.25 1.25 0 0 1 0 2.5Zm0 6.5A1.25 1.25 0 1 1 5 16.75a1.25 1.25 0 0 1 0 2.5Zm4.75-12.75h10.5a1 1 0 1 1 0 2H9.75a1 1 0 1 1 0-2Zm0 6.5h10.5a1 1 0 1 1 0 2H9.75a1 1 0 1 1 0-2Zm0 6.5h10.5a1 1 0 1 1 0 2H9.75a1 1 0 1 1 0-2Z" fill="currentColor" />
+                    </svg>
+                </button>
             </div>
-        </article>
-    {% empty %}
-        <article class="panel empty-state">
-            <h2>No albums yet.</h2>
-            <p>Create the first one to start organizing your photos.</p>
-        </article>
-    {% endfor %}
+        </div>
+    </div>
+
+    <div class="album-list is-grid" data-album-list></div>
 </section>
+
+<noscript>
+    <p class="fine-print">Enable JavaScript to browse, search, and switch album views.</p>
+</noscript>
+
+<script src="{% static 'js/album-list.js' %}" defer></script>
 {% endblock %}

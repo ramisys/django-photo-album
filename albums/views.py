@@ -1,6 +1,8 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Count
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
+from django.utils.timezone import localtime
 from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
 
 from .models import Album, Photo
@@ -28,7 +30,22 @@ class AlbumListView(AlbumOwnershipMixin, ListView):
     context_object_name = 'albums'
 
     def get_queryset(self):
-        return self.get_album_queryset()
+        return self.get_album_queryset().annotate(photo_count=Count('photos'))
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['albums_payload'] = [
+            {
+                'id': album.pk,
+                'title': album.title,
+                'description': album.description,
+                'photo_count': album.photo_count,
+                'created_at': localtime(album.created_at).isoformat(),
+                'detail_url': album.get_absolute_url(),
+            }
+            for album in context['albums']
+        ]
+        return context
 
 
 class AlbumDetailView(AlbumOwnershipMixin, DetailView):
