@@ -40,6 +40,13 @@
             return count === 1 ? '1 photo' : count + ' photos';
         }
 
+        function createCoverIcon() {
+            const coverIcon = document.createElement('span');
+            coverIcon.className = 'album-cover-icon';
+            coverIcon.innerHTML = '<svg viewBox="0 0 24 24" focusable="false" aria-hidden="true"><path d="M4 5.75A1.75 1.75 0 0 1 5.75 4h12.5A1.75 1.75 0 0 1 20 5.75v12.5A1.75 1.75 0 0 1 18.25 20H5.75A1.75 1.75 0 0 1 4 18.25V5.75Zm2 .25v11.5l3.1-3.1a1 1 0 0 1 1.42 0l1.98 1.98 3.08-3.08a1 1 0 0 1 1.42 0L18 15.83V6a.5.5 0 0 0-.5-.5h-11A.5.5 0 0 0 6 6ZM9 8.25A1.25 1.25 0 1 1 9 5.75a1.25 1.25 0 0 1 0 2.5Z" fill="currentColor"/></svg>';
+            return coverIcon;
+        }
+
         function setActiveViewButton(nextViewMode) {
             viewButtons.forEach(function (button) {
                 const isActive = button.dataset.viewMode === nextViewMode;
@@ -98,11 +105,17 @@
                 const cover = document.createElement('div');
                 cover.className = 'album-cover';
 
-                const coverIcon = document.createElement('span');
-                coverIcon.className = 'album-cover-icon';
-                coverIcon.innerHTML = '<svg viewBox="0 0 24 24" focusable="false" aria-hidden="true"><path d="M4 5.75A1.75 1.75 0 0 1 5.75 4h12.5A1.75 1.75 0 0 1 20 5.75v12.5A1.75 1.75 0 0 1 18.25 20H5.75A1.75 1.75 0 0 1 4 18.25V5.75Zm2 .25v11.5l3.1-3.1a1 1 0 0 1 1.42 0l1.98 1.98 3.08-3.08a1 1 0 0 1 1.42 0L18 15.83V6a.5.5 0 0 0-.5-.5h-11A.5.5 0 0 0 6 6ZM9 8.25A1.25 1.25 0 1 1 9 5.75a1.25 1.25 0 0 1 0 2.5Z" fill="currentColor"/></svg>';
-
-                cover.appendChild(coverIcon);
+                if (album.latest_photo_url) {
+                    const coverImage = document.createElement('img');
+                    coverImage.className = 'album-cover-image';
+                    coverImage.src = album.latest_photo_url;
+                    coverImage.alt = album.title;
+                    coverImage.loading = 'lazy';
+                    coverImage.decoding = 'async';
+                    cover.appendChild(coverImage);
+                } else {
+                    cover.appendChild(createCoverIcon());
+                }
 
                 const body = document.createElement('div');
                 body.className = 'album-card-body';

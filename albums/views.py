@@ -41,6 +41,7 @@ class AlbumListView(AlbumOwnershipMixin, ListView):
                 'title': album.title,
                 'description': album.description,
                 'photo_count': album.photo_count,
+                'latest_photo_url': album.photos.all()[0].image.url if album.photo_count else '',
                 'created_at': localtime(album.created_at).isoformat(),
                 'detail_url': album.get_absolute_url(),
             }
