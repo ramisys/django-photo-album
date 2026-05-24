@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Album
+from .models import Album, Photo
 
 
 class AlbumForm(forms.ModelForm):
@@ -23,19 +23,18 @@ class AlbumForm(forms.ModelForm):
 
 class PhotoForm(forms.ModelForm):
     class Meta:
-        model = Album._meta.get_field('photos').related_model
+        model = Photo
         fields = ['image', 'caption']
         widgets = {
             'image': forms.ClearableFileInput(
                 attrs={
                     'accept': 'image/*',
-                    'data-photo-input': 'true',
                 }
             ),
-            'caption': forms.TextInput(
+            'caption': forms.Textarea(
                 attrs={
-                    'placeholder': 'e.g., Sunset at the beach',
-                    'autocomplete': 'off',
+                    'placeholder': 'Write a description for your photo...',
+                    'rows': 5,
                 }
             ),
         }

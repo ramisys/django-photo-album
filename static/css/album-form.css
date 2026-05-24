@@ -24,6 +24,10 @@ body.photo-form-page .container {
     gap: 1.5rem;
 }
 
+.photo-form-shell {
+    gap: 1.8rem;
+}
+
 .album-form-header {
     display: grid;
     gap: 1rem;
@@ -79,8 +83,17 @@ body.photo-form-page .container {
     max-width: 860px;
     padding: 2rem 1.95rem 1.8rem;
     border-radius: 1.4rem;
-    background: rgba(255, 255, 255, 0.9);
+    background: #ffffff;
     box-shadow: var(--album-form-shadow);
+}
+
+.photo-upload-card,
+.photo-selected-card {
+    max-width: 1100px;
+}
+
+.photo-form-card {
+    max-width: 860px;
 }
 
 .album-form-card-header {
@@ -167,6 +180,20 @@ body.photo-form-page .container {
     padding-top: 0.9rem;
 }
 
+.button-outline,
+.button-ghost {
+    background: #ffffff;
+    color: var(--album-form-ink);
+    border-color: rgba(22, 32, 51, 0.12);
+}
+
+.button-outline:hover,
+.button-outline:focus-visible,
+.button-ghost:hover,
+.button-ghost:focus-visible {
+    background: #fbfbfd;
+}
+
 .album-submit-button,
 .album-cancel-button {
     min-height: 3rem;
@@ -181,6 +208,10 @@ body.photo-form-page .container {
 .album-form.is-submitting .album-submit-button {
     cursor: wait;
     opacity: 0.9;
+}
+
+.photo-form .album-field textarea {
+    min-height: 9rem;
 }
 
 @media (max-width: 640px) {

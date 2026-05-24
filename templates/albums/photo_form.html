@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block body_class %}{% if user.is_authenticated %}is-authenticated photo-form-page{% else %}photo-form-page{% endif %}{% endblock %}
-{% block title %}{% if object %}Edit Photo | Photo Album{% else %}Add Photo | Photo Album{% endif %}{% endblock %}
+{% block title %}{% if object %}Edit Photo | Photo Album{% else %}Upload Photo | Photo Album{% endif %}{% endblock %}
 {% block page_head %}
 <link rel="stylesheet" href="{% static 'css/album-form.css' %}">
 {% endblock %}
@@ -18,35 +18,30 @@
         </a>
 
         <div class="album-form-copy">
-            <h1>{% if object %}Edit Photo{% else %}Add New Photo{% endif %}</h1>
-            <p>{% if object %}Update the image or caption for this photo{% else %}Upload a new image to this album{% endif %}</p>
+            <h1>{% if object %}Edit Photo{% else %}Upload Photo{% endif %}</h1>
+            <p>{% if object %}Update the image or description for this photo{% else %}Add a new photo to your album{% endif %}</p>
         </div>
     </div>
 
-    <div class="album-form-card card panel photo-form-card" data-photo-form-shell>
+    <div class="album-form-card card panel photo-form-card">
         <div class="album-form-card-header">
             <h2>Photo Details</h2>
         </div>
 
         <form method="post" enctype="multipart/form-data" class="album-form photo-form" data-photo-form novalidate>
-            {% csrf_token %}
-            {{ form.non_field_errors }}
+        {% csrf_token %}
+        {{ form.non_field_errors }}
 
-            <div class="album-field photo-upload-field{% if form.image.errors %} has-error{% endif %}" data-field-wrap="image">
-                <label for="{{ form.image.id_for_label }}">Image</label>
-                <div class="photo-upload-shell">
-                    {{ form.image }}
-                    <span class="photo-upload-hint" data-photo-file-label>
-                        {% if object and object.image %}Current image selected{% else %}Choose a photo file{% endif %}
-                    </span>
-                </div>
+            <div class="album-field{% if form.image.errors %} has-error{% endif %}" data-field-wrap="image">
+                <label for="{{ form.image.id_for_label }}">Photo</label>
+                {{ form.image }}
                 <p class="album-field-error" data-field-error="image"{% if not form.image.errors %} hidden{% endif %}>
                     {% if form.image.errors %}{{ form.image.errors.0 }}{% endif %}
                 </p>
             </div>
 
             <div class="album-field{% if form.caption.errors %} has-error{% endif %}" data-field-wrap="caption">
-                <label for="{{ form.caption.id_for_label }}">Caption (Optional)</label>
+                <label for="{{ form.caption.id_for_label }}">Description (Optional)</label>
                 {{ form.caption }}
                 <p class="album-field-error" data-field-error="caption"{% if not form.caption.errors %} hidden{% endif %}>
                     {% if form.caption.errors %}{{ form.caption.errors.0 }}{% endif %}

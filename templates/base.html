@@ -44,7 +44,7 @@
                     </span>
                     <span>Albums</span>
                 </a>
-                <a class="sidebar-link{% if current_url_name == 'album-create' or current_url_name == 'photo-create' %} is-active{% endif %}"
+                <a class="sidebar-link{% if current_url_name == 'album-create' %} is-active{% endif %}"
                     href="{% url 'album-create' %}" data-close-navbar>
                     <span class="sidebar-link-icon" aria-hidden="true">
                         <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">

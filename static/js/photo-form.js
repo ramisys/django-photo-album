@@ -6,22 +6,11 @@
             return;
         }
 
-        const fileInput = form.querySelector('[data-photo-input]');
+        const imageInput = form.querySelector('[name="image"]');
         const captionField = form.querySelector('[name="caption"]');
         const submitButton = form.querySelector('[data-submit-button]');
-        const fileLabel = form.querySelector('[data-photo-file-label]');
         const imageError = form.querySelector('[data-field-error="image"]');
         const captionError = form.querySelector('[data-field-error="caption"]');
-
-        function updateFileLabel() {
-            if (!fileInput || !fileLabel) {
-                return;
-            }
-
-            if (fileInput.files && fileInput.files.length > 0) {
-                fileLabel.textContent = fileInput.files[0].name;
-            }
-        }
 
         function setFieldState(fieldWrap, errorElement, message) {
             if (!fieldWrap || !errorElement) {
@@ -34,37 +23,22 @@
             errorElement.hidden = !hasMessage;
         }
 
-        function validate() {
+        form.addEventListener('submit', function (event) {
             let isValid = true;
-            const fileWrap = form.querySelector('[data-field-wrap="image"]');
 
-            if (fileInput && fileInput.required && !(fileInput.files && fileInput.files.length > 0)) {
-                setFieldState(fileWrap, imageError, 'Image is required');
+            if (!imageInput || !imageInput.value) {
+                event.preventDefault();
+                setFieldState(form.querySelector('[data-field-wrap="image"]'), imageError, 'Photo is required');
                 isValid = false;
             } else {
-                setFieldState(fileWrap, imageError, '');
+                setFieldState(form.querySelector('[data-field-wrap="image"]'), imageError, '');
             }
 
             if (captionField && captionError) {
                 setFieldState(form.querySelector('[data-field-wrap="caption"]'), captionError, '');
             }
 
-            return isValid;
-        }
-
-        if (fileInput) {
-            fileInput.addEventListener('change', updateFileLabel);
-        }
-
-        if (captionField && captionError) {
-            captionField.addEventListener('input', function () {
-                setFieldState(form.querySelector('[data-field-wrap="caption"]'), captionError, '');
-            });
-        }
-
-        form.addEventListener('submit', function (event) {
-            if (!validate()) {
-                event.preventDefault();
+            if (!isValid) {
                 return;
             }
 
@@ -72,8 +46,20 @@
                 submitButton.disabled = true;
                 submitButton.textContent = form.dataset.submitLabel || 'Saving...';
             }
-
-            form.classList.add('is-submitting');
         });
+
+        if (imageInput) {
+            imageInput.addEventListener('change', function () {
+                if (imageInput.value) {
+                    setFieldState(form.querySelector('[data-field-wrap="image"]'), imageError, '');
+                }
+            });
+        }
+
+        if (captionField && captionError) {
+            captionField.addEventListener('input', function () {
+                setFieldState(form.querySelector('[data-field-wrap="caption"]'), captionError, '');
+            });
+        }
     });
 })();
